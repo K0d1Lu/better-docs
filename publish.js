@@ -232,10 +232,13 @@ function generate(title, subtitle, docs, filename, resolveLinks) {
 
   resolveLinks = resolveLinks !== false
 
+  var hasCategory =  Boolean(docs[0].category)
+  var hasSubCategory =  Boolean(docs[0].subCategory)
+
   docData = {
     env: env,
-    title: title,
-    subtitle: subtitle,
+    title: hasSubCategory ? `${docs[0].subCategory} -> ${title}`: title,
+    subtitle: hasCategory ? docs[0].category : subtitle,
     docs: docs
   }
 
@@ -371,7 +374,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         if (subCategoryName) {
           heading = heading + ' / ' + subCategoryName
         }
-        nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
+        var h3 = subCategoryName || heading
+        var id = heading + String(Date.now() + Math.floor(Math.random() * 100))
+        nav += '<input id="' + id + '" class="toggle" type="checkbox"><label for="' + id + '" class="lbl-toggle"><h3>' + h3 + '</h3></label><div class="collapsible-content"><div class="content-inner"><ul>' + itemsNav + '</ul></div></div>'
       }
     }
   })
